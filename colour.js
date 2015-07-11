@@ -20,7 +20,7 @@ $(function() {
 
 function setHSLsFromColours() {
     for(var i = 1; i <= 5; ++i) {
-        var rgb = colours[i].match(/#(..)(..)(..)/);
+        var rgb = colours[i].match(/#?(..)(..)(..)/);
 
         for(var j = 1; j <= 3; ++j) {
             rgb[j] = parseInt(rgb[j], 16);
@@ -28,13 +28,16 @@ function setHSLsFromColours() {
 
 //        $('#hs-' + i).val('R: ' + rgb[1] + ', G: ' + rgb[2] + ', B: ' + rgb[3]);
 
-        hsl = RGBtoHSL(rgb[1], rgb[2], rgb[3]);
         hsv = RGBtoHSV(rgb[1], rgb[2], rgb[3]);
 
-        var hs_text = 'H: ' + Math.round(hsl[0]) + ', S: ' + Math.round(hsl[1] * 100) +
-                    ', L: ' + Math.round(hsl[2] * 100) +  ' :: H: ' + Math.round(hsv[0])  +
-                    ', S: ' + Math.round(hsv[1] * 100) + ', V: ' + Math.round(hsv[2] * 100);
-        $('#hs-' + i).val(hs_text);
+        var rgb_text = 'R: ' + rjust(rgb[1], 3) +
+                       ', G: ' + rjust(rgb[2], 3) +
+                       ', B: ' + rjust(rgb[3], 3)
+
+        var hs_text = 'H: ' + rjust(Math.round(hsv[0]), 3)  +
+                      ', S: ' + rjust(Math.round(hsv[1]), 3) +
+                      ', V: ' + rjust(Math.round(hsv[2]), 3);
+        $('#hs-' + i).val(rgb_text + ' :: ' + hs_text);
     }
 }
 
@@ -43,14 +46,76 @@ function setBlocksFromColours() {
         for(var fg = 1; fg <= 5; ++fg) {
             var $block = $('#block-' + bg + fg);
 
+            $block.css('background-color', colours[bg])
+
             if(fg != bg) {
-                $block.css({ 'backgroundColor': colours[bg], 'color': colours[fg] });
+                $block.css('color', colours[fg]);
             }
 
             $block.find('p').html(colours[bg] + '<br/>' + colours[fg]);
         }
     }
 }
+
+function rjust(value, width) {
+    var str = value.toString();
+
+    while(str.length < width) {
+        str = ' ' + str;
+    }
+
+    return str;
+}
+
+/**
+ * Converts an RGB color value to HSV. Conversion formula
+ * adapted from http://en.wikipedia.org/wiki/HSV_color_space.
+ * Assumes r, g, and b are contained in the set [0, 255] and
+ * returns h as 0 to 360, and s and v as percentage.
+ *
+ * @param   Number  r       The red color value
+ * @param   Number  g       The green color value
+ * @param   Number  b       The blue color value
+ * @return  Array           The HSV representation
+ */
+
+function RGBtoHSV(r, g, b) {
+    r /= 255, g /= 255, b /= 255;
+
+    var max = Math.max(r, g, b), min = Math.min(r, g, b);
+    var h, s, v = max * 100;      // V = MAX
+
+    var d = max - min;
+    s = (max == 0) ? 0 : (d / max) * 100;
+
+    if(max == min) {
+        h = 0; // achromatic
+    }
+    else {
+        switch(max) {
+            case r:
+                h = (g - b) / d + (g < b ? 6 : 0);
+                break;
+
+            case g:
+                h = (b - r) / d + 2;
+                break;
+
+            case b:
+                h = (r - g) / d + 4;
+                break;
+        }
+
+        h *= 60;
+    }
+
+    return [h, s, v];
+}
+
+
+/* These functions are not used, but are retained so that they're all in one place.
+ * HSV/B seems to make more sense that HSL.
+ */
 
 /**
  * Converts an RGB color value to HSL. Conversion formula
@@ -95,51 +160,6 @@ function RGBtoHSL(r, g, b) {
     }
 
     return [h, s, l];
-}
-
-/**
- * Converts an RGB color value to HSV. Conversion formula
- * adapted from http://en.wikipedia.org/wiki/HSV_color_space.
- * Assumes r, g, and b are contained in the set [0, 255] and
- * returns h, s, and v in the set [0, 1].
- *
- * @param   Number  r       The red color value
- * @param   Number  g       The green color value
- * @param   Number  b       The blue color value
- * @return  Array           The HSV representation
- */
-
-function RGBtoHSV(r, g, b) {
-    r /= 255, g /= 255, b /= 255;
-
-    var max = Math.max(r, g, b), min = Math.min(r, g, b);
-    var h, s, v = max;      // V = MAX
-
-    var d = max - min;
-    s = max == 0 ? 0 : d / max;
-
-    if(max == min) {
-        h = 0; // achromatic
-    }
-    else {
-        switch(max) {
-            case r:
-                h = (g - b) / d + (g < b ? 6 : 0);
-                break;
-
-            case g:
-                h = (b - r) / d + 2;
-                break;
-
-            case b:
-                h = (r - g) / d + 4;
-                break;
-        }
-
-        h *= 60;
-    }
-
-    return [h, s, v];
 }
 
 /**
