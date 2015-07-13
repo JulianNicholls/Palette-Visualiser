@@ -36,9 +36,9 @@ function setHSLsFromColours() {
 
         hsv = RGBtoHSV(rgb[1], rgb[2], rgb[3]);
 
-        var rgb_text = 'R: ' + rjust(rgb[1], 3) +
-                       ', G: ' + rjust(rgb[2], 3) +
-                       ', B: ' + rjust(rgb[3], 3) +
+        var rgb_text = 'RGB: ' + rjust(rgb[1], 3) +
+                       ', ' + rjust(rgb[2], 3) +
+                       ', ' + rjust(rgb[3], 3) +
                        ', Luma: ' + rjust(luma(rgb[1], rgb[2], rgb[3]), 6)
 
         var hs_text = 'H: ' + rjust(Math.round(hsv[0]), 3)  +
@@ -52,7 +52,7 @@ function setHSLsFromColours() {
 function setBlocksFromColours() {
     for(var bg = 1; bg <= 5; ++bg) {
         for(var fg = 1; fg <= 5; ++fg) {
-            var $block = $('#block-' + bg + fg);
+            var $block = $('#block-' + bg + fg + ' p');
 
             $block.css('background-color', colours[bg])
 
@@ -60,7 +60,7 @@ function setBlocksFromColours() {
                 $block.css('color', colours[fg]);
             }
 
-            $block.find('p').html(colours[bg] + '<br/>' + colours[fg]);
+            $block.html(colours[bg] + '<br/>' + colours[fg]);
         }
     }
 }
@@ -77,7 +77,7 @@ function rjust(value, width) {
 
 function luma(r, g, b) {
     var rawl = 0.3 * r + 0.59 * g + 0.11 * b
-    return Math.round( rawl * 100 ) / 100
+    return Math.round( rawl * 10 ) / 10
 }
 
 /**

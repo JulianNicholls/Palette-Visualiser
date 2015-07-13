@@ -24,26 +24,25 @@ input {
     font-size: 17px;
 }
 
-div.row {
-    width: 800px;
-    margin: 0 auto;
-    overflow: hidden;
+table {
+    margin-top: 40px;
+    border-collapse: collapse;
 }
 
-div.row:first-of-type {
-    margin-top: 40px;
+th {
+    border: 1px solid #ccc;
 }
 
 .colour-block {
     width: 7em;
-    height: 5em;
-    background-color: #333;
-    color: #eee;
-    float: left;
-    margin: 3px;
+    background-color: #eee;
+    color: white;
 }
 
 .colour-block p {
+    height: 4em;
+    margin: 10px;
+    padding: 10px;
     text-align: center;
     line-height: 1.4;
 }
