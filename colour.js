@@ -16,6 +16,12 @@ $(function() {
         setHSLsFromColours();
         setBlocksFromColours()
     });
+
+    $('.colour-block').click( function() {
+        var $this = $(this);
+
+        $('#text-display').css({ 'backgroundColor': $this.css('background-color'), 'color': $this.css('color') })
+    });
 });
 
 function setHSLsFromColours() {
@@ -32,11 +38,13 @@ function setHSLsFromColours() {
 
         var rgb_text = 'R: ' + rjust(rgb[1], 3) +
                        ', G: ' + rjust(rgb[2], 3) +
-                       ', B: ' + rjust(rgb[3], 3)
+                       ', B: ' + rjust(rgb[3], 3) +
+                       ', Luma: ' + rjust(luma(rgb[1], rgb[2], rgb[3]), 6)
 
         var hs_text = 'H: ' + rjust(Math.round(hsv[0]), 3)  +
                       ', S: ' + rjust(Math.round(hsv[1]), 3) +
                       ', V: ' + rjust(Math.round(hsv[2]), 3);
+
         $('#hs-' + i).val(rgb_text + ' :: ' + hs_text);
     }
 }
@@ -65,6 +73,11 @@ function rjust(value, width) {
     }
 
     return str;
+}
+
+function luma(r, g, b) {
+    var rawl = 0.3 * r + 0.59 * g + 0.11 * b
+    return Math.round( rawl * 100 ) / 100
 }
 
 /**

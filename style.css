@@ -1,7 +1,7 @@
 body {
     background: white;
     color: black;
-    font-family: open-sans, arial, sans-serif;
+    font-family: 'Open Sans', 'Helvetica Neue', Helvetica, arial, sans-serif;
     font-size: 18px;
 }
 
@@ -20,13 +20,14 @@ label {
 }
 
 input {
-    font-family: 'Courier New', 'Courier', monospace;
-    font-size: 18px;
+    font-family: monospace;
+    font-size: 17px;
 }
 
 div.row {
     width: 800px;
     margin: 0 auto;
+    overflow: hidden;
 }
 
 div.row:first-of-type {
@@ -34,8 +35,8 @@ div.row:first-of-type {
 }
 
 .colour-block {
-    width: 140px;
-    height: 125px;
+    width: 7em;
+    height: 5em;
     background-color: #333;
     color: #eee;
     float: left;
@@ -45,4 +46,17 @@ div.row:first-of-type {
 .colour-block p {
     text-align: center;
     line-height: 1.4;
+}
+
+#text-display {
+    font-size: 14px;
+    margin-top: 20px;
+    padding: 20px;
+    background-color: black;
+    color: white;
+}
+
+#text-display a {
+    color: #bbf;
+    text-decoration: none;
 }
