@@ -17,29 +17,28 @@ $(function() {
         setBlocksFromColours()
     });
 
-    $('.colour-block').click( function() {
+    $('.colour-block p').click( function() {
         var $this = $(this);
 
-        $('#text-display').css({ 'backgroundColor': $this.css('background-color'), 'color': $this.css('color') })
+        $('#text-display').css({
+            'backgroundColor': $this.css('background-color'),
+            'color': $this.css('color')
+        });
     });
 });
 
 function setHSLsFromColours() {
     for(var i = 1; i <= 5; ++i) {
-        var rgb = colours[i].match(/#?(..)(..)(..)/);
-
-        for(var j = 1; j <= 3; ++j) {
-            rgb[j] = parseInt(rgb[j], 16);
-        }
+        var rgb = rgbStrToArray(colours[i])
 
 //        $('#hs-' + i).val('R: ' + rgb[1] + ', G: ' + rgb[2] + ', B: ' + rgb[3]);
 
-        hsv = RGBtoHSV(rgb[1], rgb[2], rgb[3]);
+        hsv = RGBtoHSV(rgb[0], rgb[1], rgb[2]);
 
-        var rgb_text = 'RGB: ' + rjust(rgb[1], 3) +
+        var rgb_text = 'RGB: ' + rjust(rgb[0], 3) +
+                       ', ' + rjust(rgb[1], 3) +
                        ', ' + rjust(rgb[2], 3) +
-                       ', ' + rjust(rgb[3], 3) +
-                       ', Luma: ' + rjust(luma(rgb[1], rgb[2], rgb[3]), 6)
+                       ', Luma: ' + rjust(luma(rgb), 5)
 
         var hs_text = 'H: ' + rjust(Math.round(hsv[0]), 3)  +
                       ', S: ' + rjust(Math.round(hsv[1]), 3) +
@@ -54,15 +53,32 @@ function setBlocksFromColours() {
         for(var fg = 1; fg <= 5; ++fg) {
             var $block = $('#block-' + bg + fg + ' p');
 
+            var rgbB    = rgbStrToArray(colours[bg]),
+                rgbF    = rgbStrToArray(colours[fg]),
+                lumaB   = luma(rgbB),
+                lumaF   = (fg == bg) ? luma([255, 255, 255]) : luma(rgbF),
+                lumaD   = Math.round(Math.abs(lumaB - lumaF) * 10) / 10,
+                lumaStr = '<br />' + lumaD;
+
             $block.css('background-color', colours[bg])
 
             if(fg != bg) {
                 $block.css('color', colours[fg]);
             }
 
-            $block.html(colours[bg] + '<br/>' + colours[fg]);
+            $block.html(colours[bg] + '<br/>' + colours[fg] + lumaStr);
         }
     }
+}
+
+function rgbStrToArray(colour) {
+    var rgb = colour.match(/#?(..)(..)(..)/);
+
+    for(var i = 0; i < 3; ++i) {
+        rgb[i] = parseInt(rgb[i+1], 16);
+    }
+
+    return rgb;
 }
 
 function rjust(value, width) {
@@ -75,9 +91,9 @@ function rjust(value, width) {
     return str;
 }
 
-function luma(r, g, b) {
-    var rawl = 0.3 * r + 0.59 * g + 0.11 * b
-    return Math.round( rawl * 10 ) / 10
+function luma(rgb) {
+    var rawl = 0.3 * rgb[0] + 0.59 * rgb[1] + 0.11 * rgb[2]
+    return Math.round(rawl * 10) / 10
 }
 
 /**
