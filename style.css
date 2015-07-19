@@ -22,6 +22,7 @@ label {
 input {
     font-family: monospace;
     font-size: 17px;
+    padding: 3px 5px;
 }
 
 table {
@@ -48,7 +49,7 @@ th {
 }
 
 #text-display {
-    font-size: 14px;
+    font-size: 16px;
     margin-top: 20px;
     padding: 20px;
     background-color: black;
