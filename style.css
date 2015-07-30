@@ -2,7 +2,7 @@ body {
     background: white;
     color: black;
     font-family: 'Open Sans', 'Helvetica Neue', Helvetica, arial, sans-serif;
-    font-size: 18px;
+    font-size: 16px;
 }
 
 .container {
@@ -21,7 +21,7 @@ label {
 
 input {
     font-family: monospace;
-    font-size: 17px;
+    font-size: 16px;
     padding: 3px 5px;
 }
 

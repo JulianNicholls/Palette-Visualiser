@@ -1,4 +1,4 @@
-var colours = ['', '#004fb0', '#002d63', '#197ffc', '#634000', '#b07200'];
+var colours = ['', '#004fb0', '#002d63', '#197ffc', '#634000', '#b07200', '#000000', '#ffffff'];
 
 $(function() {
     for(var i = 1; i <= 5; ++i) {
@@ -49,8 +49,8 @@ function setHSLsFromColours() {
 }
 
 function setBlocksFromColours() {
-    for(var bg = 1; bg <= 5; ++bg) {
-        for(var fg = 1; fg <= 5; ++fg) {
+    for(var bg = 1; bg <= 7; ++bg) {
+        for(var fg = 1; fg <= 7; ++fg) {
             var $block = $('#block-' + bg + fg + ' p');
 
             var rgbB    = rgbStrToArray(colours[bg]),
