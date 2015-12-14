@@ -17,6 +17,10 @@ $(function () {
         setBlocksFromColours()
     });
 
+    $('#suppress').on('change', function () {
+        setBlocksFromColours();
+    });
+
     $('.colour-block p').on('click', function () {
         var $this = $(this);
 
@@ -37,7 +41,7 @@ function setTableFromColours() {
         $row.find("td.g").text(rgb[1]);
         $row.find("td.b").text(rgb[2]);
 
-        $row.find("td.luma").html(luma(rgb).toFixed(1) + '<br>' + sRGBRelativeLuminance(rgb).toFixed(4));
+        $row.find("td.luma").text(sRGBRelativeLuminance(rgb).toFixed(4));
 
         $row.find("td.h").text(Math.round(hsv[0]));
         $row.find("td.s").text(Math.round(hsv[1]));
@@ -50,21 +54,27 @@ function setBlocksFromColours() {
         for(var fg = 1; fg <= 7; ++fg) {
             var $block = $('#block-' + bg + fg + ' p');
 
-            var rgbB    = rgbStrToArray(colours[bg]),
-                rgbF    = rgbStrToArray(colours[fg]),
+            var rgbB     = rgbStrToArray(colours[bg]),
+                rgbF     = rgbStrToArray(colours[fg]),
+                lumaD    = contrastRatio(rgbB, rgbF),
+                suppress = $('input:checked').length === 1,
                 // lumaB   = luma(rgbB),
                 // lumaF   = (fg == bg) ? luma([255, 255, 255]) : luma(rgbF),
                 // lumaD   = Math.round(Math.abs(lumaB - lumaF) * 10) / 10,
-                lumaD = contrastRatio(rgbB, (fg == bg) ? [255, 255, 255] : rgbF),
                 lumaStr = '<br />' + lumaD + ':1';
 
-            $block.css('background-color', colours[bg])
-
-            if(fg != bg) {
-                $block.css('color', colours[fg]);
+            if(suppress && lumaD < 4.5 || fg == bg) {
+                $block.css({'background-color': '#888', 'color': '#888'});
             }
+            else {
+                $block.css('background-color', colours[bg])
 
-            $block.html(colours[bg] + '<br/>' + colours[fg] + lumaStr);
+                if(fg != bg) {
+                    $block.css('color', colours[fg]);
+                }
+
+                $block.html(colours[bg] + '<br/>' + colours[fg] + lumaStr);
+            }
         }
     }
 }
