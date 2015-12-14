@@ -14,6 +14,21 @@ h1 {
     text-align: center;
 }
 
+div.left-form {
+    float: left;
+    width: 20em;
+    padding-left: 1em;
+}
+
+div.right-table {
+    float: left;
+    margin-bottom: 40px;
+}
+
+.clearfix {
+    clear: both;
+}
+
 label {
     float: left;
     width: 4em;
@@ -26,7 +41,6 @@ input {
 }
 
 table {
-    margin-top: 40px;
     border-collapse: collapse;
 }
 
@@ -40,10 +54,11 @@ table#rgb-hsv td {
     text-align: right;
     border: 1px solid #777;
     width: 3em;
-    padding: 3px;
+    padding: 3px 5px;
 }
 
 table#rgb-hsv td.luma {
+    width: 4em;
     border: 2px solid #777;
 }
 

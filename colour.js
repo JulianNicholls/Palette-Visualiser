@@ -1,23 +1,23 @@
 var colours = ['', '#004fb0', '#002d63', '#197ffc', '#634000', '#b07200', '#000000', '#ffffff'];
 
-$(function() {
+$(function () {
     for(var i = 1; i <= 5; ++i) {
         $('#input-' + i).val(colours[i]);
     }
 
-    setHSLsFromColours();
+    setTableFromColours();
     setBlocksFromColours();
 
-    $('.colour-input').blur( function() {
+    $('.colour-input').on('blur', function () {
         for(var i = 1; i <= 5; ++i) {
             colours[i] = $('#input-' + i).val();
         }
 
-        setHSLsFromColours();
+        setTableFromColours();
         setBlocksFromColours()
     });
 
-    $('.colour-block p').click( function() {
+    $('.colour-block p').on('click', function () {
         var $this = $(this);
 
         $('#text-display').css({
@@ -27,24 +27,21 @@ $(function() {
     });
 });
 
-function setHSLsFromColours() {
+function setTableFromColours() {
     for(var i = 1; i <= 5; ++i) {
-        var rgb = rgbStrToArray(colours[i])
+        var rgb     = rgbStrToArray(colours[i]),
+            hsv     = RGBtoHSV(rgb[0], rgb[1], rgb[2]),
+            $row    = $('tr#line-' + i);
 
-//        $('#hs-' + i).val('R: ' + rgb[1] + ', G: ' + rgb[2] + ', B: ' + rgb[3]);
+        $row.find("td.r").text(rgb[0]);
+        $row.find("td.g").text(rgb[1]);
+        $row.find("td.b").text(rgb[2]);
 
-        hsv = RGBtoHSV(rgb[0], rgb[1], rgb[2]);
+        $row.find("td.luma").html(luma(rgb).toFixed(1) + '<br>' + sRGBRelativeLuminance(rgb).toFixed(4));
 
-        var rgb_text = 'RGB: ' + rjust(rgb[0], 3) +
-                       ', ' + rjust(rgb[1], 3) +
-                       ', ' + rjust(rgb[2], 3) +
-                       ', Luma: ' + rjust(luma(rgb), 5)
-
-        var hs_text = 'H: ' + rjust(Math.round(hsv[0]), 3)  +
-                      ', S: ' + rjust(Math.round(hsv[1]), 3) +
-                      ', V: ' + rjust(Math.round(hsv[2]), 3);
-
-        $('#hs-' + i).val(rgb_text + ' :: ' + hs_text);
+        $row.find("td.h").text(Math.round(hsv[0]));
+        $row.find("td.s").text(Math.round(hsv[1]));
+        $row.find("td.v").text(Math.round(hsv[2]));
     }
 }
 
@@ -55,10 +52,11 @@ function setBlocksFromColours() {
 
             var rgbB    = rgbStrToArray(colours[bg]),
                 rgbF    = rgbStrToArray(colours[fg]),
-                lumaB   = luma(rgbB),
-                lumaF   = (fg == bg) ? luma([255, 255, 255]) : luma(rgbF),
-                lumaD   = Math.round(Math.abs(lumaB - lumaF) * 10) / 10,
-                lumaStr = '<br />' + lumaD;
+                // lumaB   = luma(rgbB),
+                // lumaF   = (fg == bg) ? luma([255, 255, 255]) : luma(rgbF),
+                // lumaD   = Math.round(Math.abs(lumaB - lumaF) * 10) / 10,
+                lumaD = contrastRatio(rgbB, (fg == bg) ? [255, 255, 255] : rgbF),
+                lumaStr = '<br />' + lumaD + ':1';
 
             $block.css('background-color', colours[bg])
 
@@ -81,20 +79,52 @@ function rgbStrToArray(colour) {
     return rgb;
 }
 
-function rjust(value, width) {
-    var str = value.toString();
-
-    while(str.length < width) {
-        str = ' ' + str;
-    }
-
-    return str;
-}
+// Luma = 0.3 * R + 0.59 * G + 0.11 * B
 
 function luma(rgb) {
     var rawl = 0.3 * rgb[0] + 0.59 * rgb[1] + 0.11 * rgb[2]
     return Math.round(rawl * 10) / 10
 }
+
+// The relative brightness of any point in a colorspace, normalized to 0 for
+// darkest black and 1 for lightest white.
+
+// Note 1: For the sRGB colorspace, the relative luminance of a color is defined as
+//   L = 0.2126 * R + 0.7152 * G + 0.0722 * B where R, G and B are defined as:
+
+// if RsRGB <= 0.03928 then R = RsRGB/12.92 else R = ((RsRGB+0.055)/1.055) ^ 2.4
+// if GsRGB <= 0.03928 then G = GsRGB/12.92 else G = ((GsRGB+0.055)/1.055) ^ 2.4
+// if BsRGB <= 0.03928 then B = BsRGB/12.92 else B = ((BsRGB+0.055)/1.055) ^ 2.4
+// and RsRGB, GsRGB, and BsRGB are defined as:
+
+// RsRGB = R8bit/255
+// GsRGB = G8bit/255
+// BsRGB = B8bit/255
+
+function sRGBRelativeLuminance(rgb) {
+    var rsrgb = rgb[0] / 255,
+        gsrgb = rgb[1] / 255,
+        bsrgb = rgb[2] / 255
+
+    var r = (rsrgb <= 0.03928) ? rsrgb / 12.92 : Math.pow((rsrgb + 0.055) / 1.055, 2.4),
+        g = (gsrgb <= 0.03928) ? gsrgb / 12.92 : Math.pow((gsrgb + 0.055) / 1.055, 2.4),
+        b = (bsrgb <= 0.03928) ? bsrgb / 12.92 : Math.pow((bsrgb + 0.055) / 1.055, 2.4)
+
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+}
+
+// Relative luminance = (Lighter + 0.05) / (Darker + 0.05)
+
+function contrastRatio(rgbA, rgbB) {
+    var a = sRGBRelativeLuminance(rgbA) + 0.05,
+        b = sRGBRelativeLuminance(rgbB) + 0.05;
+
+    if(a > b)
+        return (a / b).toFixed(2)
+
+    return (b / a).toFixed(2)
+}
+
 
 /**
  * Converts an RGB color value to HSV. Conversion formula

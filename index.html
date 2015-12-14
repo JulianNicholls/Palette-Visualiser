@@ -1,37 +1,35 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>25 Colours</title>
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="style.css">
-  </head>
+<head>
+  <title>25 Colours</title>
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
 
-  <body>
-    <div class="container">
-      <h1>Colour Blocks</h1>
+<body>
+  <div class="container">
+    <h1>Colour Blocks</h1>
 
+    <div class="left-form">
       <form>
         <label for="input-1">Base</label>
-        <input type="text" class="colour-input" id="input-1" tabindex="1" size="8" autofocus: true>
-        <input type="text" id="hs-1" size="65" readonly><br/>
+        <input type="text" class="colour-input" id="input-1" tabindex="1" size="8" autofocus="true"><br>
 
         <label for="input-2">One</label>
-        <input type="text" class="colour-input" id="input-2" tabindex="2" size="8">
-        <input type="text" id="hs-2" size="65" readonly><br/>
+        <input type="text" class="colour-input" id="input-2" tabindex="2" size="8"><br>
 
         <label for="input-3">Two</label>
-        <input type="text" class="colour-input" id="input-3" tabindex="3" size="8">
-        <input type="text" id="hs-3" size="65" readonly><br/>
+        <input type="text" class="colour-input" id="input-3" tabindex="3" size="8"><br>
 
         <label for="input-4">Three</label>
-        <input type="text" class="colour-input" id="input-4" tabindex="4" size="8">
-        <input type="text" id="hs-4" size="65" readonly><br/>
+        <input type="text" class="colour-input" id="input-4" tabindex="4" size="8"><br>
 
         <label for="input-5">Four</label>
         <input type="text" class="colour-input" id="input-5" tabindex="5" size="8">
-        <input type="text" id="hs-5" size="65" readonly><br/>
       </form>
+    </div>
 
+    <div class="right-table">
       <table id="rgb-hsv">
         <thead>
           <th colspan="3">RGB</th>
@@ -39,150 +37,151 @@
           <th colspan="3">HSV</th>
         </thead>
         <tbody>
-          <tr id="base line-1">
-            <td>0</td><td>79</td><td>176</td>
+          <tr id="line-1">
+            <td class="r">0</td><td class="g">79</td><td class="b">176</td>
             <td class="luma">66</td>
-            <td>213</td><td>100</td><td>69</td>
+            <td class="h">213</td><td class="s">100</td><td class="v">69</td>
           </tr>
 
-          <tr id="one line-2">
-            <td>0</td><td>45</td><td>99</td>
-            <td class="luma">37.4</td>
-            <td>213</td><td>100</td><td>39</td>
+          <tr id="line-2">
+            <td class="r">0</td><td class="g">79</td><td class="b">176</td>
+            <td class="luma">66</td>
+            <td class="h">213</td><td class="s">100</td><td class="v">69</td>
           </tr>
 
-          <tr id="two line-3">
-            <td>25</td><td>127</td><td>252</td>
-            <td class="luma">110.2</td>
-            <td>213</td><td>90</td><td>99</td>
+          <tr id="line-3">
+            <td class="r">0</td><td class="g">79</td><td class="b">176</td>
+            <td class="luma">66</td>
+            <td class="h">213</td><td class="s">100</td><td class="v">69</td>
           </tr>
 
-          <tr id="two line-3">
-            <td>99</td><td>64</td><td>0</td>
-            <td class="luma">67.5</td>
-            <td>39</td><td>100</td><td>39</td>
+          <tr id="line-4">
+            <td class="r">0</td><td class="g">79</td><td class="b">176</td>
+            <td class="luma">66</td>
+            <td class="h">213</td><td class="s">100</td><td class="v">69</td>
           </tr>
 
-          <tr id="two line-3">
-            <td>176</td><td>114</td><td>0</td>
-            <td class="luma">120.1</td>
-            <td>39</td><td>100</td><td>69</td>
+          <tr id="line-5">
+            <td class="r">0</td><td class="g">79</td><td class="b">176</td>
+            <td class="luma">66</td>
+            <td class="h">213</td><td class="s">100</td><td class="v">69</td>
           </tr>
         </tbody>
       </table>
-
-
-      <table>
-        <thead>
-          <tr>
-            <th>Colour</th>
-            <th>FG Base</th>
-            <th>FG One</th>
-            <th>FG Two</th>
-            <th>FG Three</th>
-            <th>FG Four</th>
-            <th>Black</th>
-            <th>White</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th>BG Base</th>
-            <td class="colour-block" id="block-11"><p></p></td>
-            <td class="colour-block" id="block-12"><p></p></td>
-            <td class="colour-block" id="block-13"><p></p></td>
-            <td class="colour-block" id="block-14"><p></p></td>
-            <td class="colour-block" id="block-15"><p></p></td>
-            <td class="colour-block" id="block-16"><p></p></td>
-            <td class="colour-block" id="block-17"><p></p></td>
-          </tr>
-          <tr>
-            <th>BG One</th>
-            <td class="colour-block" id="block-21"><p></p></td>
-            <td class="colour-block" id="block-22"><p></p></td>
-            <td class="colour-block" id="block-23"><p></p></td>
-            <td class="colour-block" id="block-24"><p></p></td>
-            <td class="colour-block" id="block-25"><p></p></td>
-            <td class="colour-block" id="block-26"><p></p></td>
-            <td class="colour-block" id="block-27"><p></p></td>
-          </tr>
-          <tr>
-            <th>BG Two</th>
-            <td class="colour-block" id="block-31"><p></p></td>
-            <td class="colour-block" id="block-32"><p></p></td>
-            <td class="colour-block" id="block-33"><p></p></td>
-            <td class="colour-block" id="block-34"><p></p></td>
-            <td class="colour-block" id="block-35"><p></p></td>
-            <td class="colour-block" id="block-36"><p></p></td>
-            <td class="colour-block" id="block-37"><p></p></td>
-          </tr>
-          <tr>
-            <th>BG Three</th>
-            <td class="colour-block" id="block-41"><p></p></td>
-            <td class="colour-block" id="block-42"><p></p></td>
-            <td class="colour-block" id="block-43"><p></p></td>
-            <td class="colour-block" id="block-44"><p></p></td>
-            <td class="colour-block" id="block-45"><p></p></td>
-            <td class="colour-block" id="block-46"><p></p></td>
-            <td class="colour-block" id="block-47"><p></p></td>
-          </tr>
-          <tr>
-            <th>BG Four</th>
-            <td class="colour-block" id="block-51"><p></p></td>
-            <td class="colour-block" id="block-52"><p></p></td>
-            <td class="colour-block" id="block-53"><p></p></td>
-            <td class="colour-block" id="block-54"><p></p></td>
-            <td class="colour-block" id="block-55"><p></p></td>
-            <td class="colour-block" id="block-56"><p></p></td>
-            <td class="colour-block" id="block-57"><p></p></td>
-          </tr>
-          <tr>
-            <th>Black</th>
-            <td class="colour-block" id="block-61"><p></p></td>
-            <td class="colour-block" id="block-62"><p></p></td>
-            <td class="colour-block" id="block-63"><p></p></td>
-            <td class="colour-block" id="block-64"><p></p></td>
-            <td class="colour-block" id="block-65"><p></p></td>
-            <td class="colour-block" id="block-66"><p></p></td>
-            <td class="colour-block" id="block-67"><p></p></td>
-          </tr>
-          <tr>
-            <th>White</th>
-            <td class="colour-block" id="block-71"><p></p></td>
-            <td class="colour-block" id="block-72"><p></p></td>
-            <td class="colour-block" id="block-73"><p></p></td>
-            <td class="colour-block" id="block-74"><p></p></td>
-            <td class="colour-block" id="block-75"><p></p></td>
-            <td class="colour-block" id="block-76"><p></p></td>
-            <td class="colour-block" id="block-77"><p></p></td>
-          </tr>
-        </tbody>
-      </table>
-
-      <div id="text-display">
-        <p>
-          In 2011, the UK's <a href="http://www.dft.gov.uk" title="DfT Site">Department for Transport (DfT)</a>
-          started to issue datasets for public use under the
-          <a href="//www.nationalarchives.gov.uk/doc/open%2Dgovernment%2Dlicence/" title="Usage License">Open&nbsp;Government&nbsp;License</a>. The first of these was planned roadworks issued by the
-          Highways Agency.
-        </p>
-        <p>
-          Presented here is the latest data on planned roadworks on the Highway Agency's roads, distilled
-          from the data files on
-          <a href="//data.gov.uk/dataset/highways_agency_planned_roadworks" title="dataset">this&nbsp;page</a>.
-          You can find information by road number, or search by location. The roadworks that are
-          shown have already started or will start within the next week. Roadworks which should have been
-          complete at least a week ago are filtered out (hopeful, I know).
-        </p>
-        <p>
-          These are the outstanding planned roadworks from the 29 Jun 2015 data file on the site,
-          covering planned roadworks up to the end of 2017. I will keep this page updated
-          as new roadworks are posted on the DfT site, which is currently happening about every two weeks.
-        </p>
-      </div>
     </div>
 
-    <script src="http://code.jquery.com/jquery.js"></script>
-    <script src="colour.js"></script>
-  </body>
+
+    <table class="clearfix">
+      <thead>
+        <tr>
+          <th>Colour</th>
+          <th>FG Base</th>
+          <th>FG One</th>
+          <th>FG Two</th>
+          <th>FG Three</th>
+          <th>FG Four</th>
+          <th>Black</th>
+          <th>White</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>BG Base</th>
+          <td class="colour-block" id="block-11"><p></p></td>
+          <td class="colour-block" id="block-12"><p></p></td>
+          <td class="colour-block" id="block-13"><p></p></td>
+          <td class="colour-block" id="block-14"><p></p></td>
+          <td class="colour-block" id="block-15"><p></p></td>
+          <td class="colour-block" id="block-16"><p></p></td>
+          <td class="colour-block" id="block-17"><p></p></td>
+        </tr>
+        <tr>
+          <th>BG One</th>
+          <td class="colour-block" id="block-21"><p></p></td>
+          <td class="colour-block" id="block-22"><p></p></td>
+          <td class="colour-block" id="block-23"><p></p></td>
+          <td class="colour-block" id="block-24"><p></p></td>
+          <td class="colour-block" id="block-25"><p></p></td>
+          <td class="colour-block" id="block-26"><p></p></td>
+          <td class="colour-block" id="block-27"><p></p></td>
+        </tr>
+        <tr>
+          <th>BG Two</th>
+          <td class="colour-block" id="block-31"><p></p></td>
+          <td class="colour-block" id="block-32"><p></p></td>
+          <td class="colour-block" id="block-33"><p></p></td>
+          <td class="colour-block" id="block-34"><p></p></td>
+          <td class="colour-block" id="block-35"><p></p></td>
+          <td class="colour-block" id="block-36"><p></p></td>
+          <td class="colour-block" id="block-37"><p></p></td>
+        </tr>
+        <tr>
+          <th>BG Three</th>
+          <td class="colour-block" id="block-41"><p></p></td>
+          <td class="colour-block" id="block-42"><p></p></td>
+          <td class="colour-block" id="block-43"><p></p></td>
+          <td class="colour-block" id="block-44"><p></p></td>
+          <td class="colour-block" id="block-45"><p></p></td>
+          <td class="colour-block" id="block-46"><p></p></td>
+          <td class="colour-block" id="block-47"><p></p></td>
+        </tr>
+        <tr>
+          <th>BG Four</th>
+          <td class="colour-block" id="block-51"><p></p></td>
+          <td class="colour-block" id="block-52"><p></p></td>
+          <td class="colour-block" id="block-53"><p></p></td>
+          <td class="colour-block" id="block-54"><p></p></td>
+          <td class="colour-block" id="block-55"><p></p></td>
+          <td class="colour-block" id="block-56"><p></p></td>
+          <td class="colour-block" id="block-57"><p></p></td>
+        </tr>
+        <tr>
+          <th>Black</th>
+          <td class="colour-block" id="block-61"><p></p></td>
+          <td class="colour-block" id="block-62"><p></p></td>
+          <td class="colour-block" id="block-63"><p></p></td>
+          <td class="colour-block" id="block-64"><p></p></td>
+          <td class="colour-block" id="block-65"><p></p></td>
+          <td class="colour-block" id="block-66"><p></p></td>
+          <td class="colour-block" id="block-67"><p></p></td>
+        </tr>
+        <tr>
+          <th>White</th>
+          <td class="colour-block" id="block-71"><p></p></td>
+          <td class="colour-block" id="block-72"><p></p></td>
+          <td class="colour-block" id="block-73"><p></p></td>
+          <td class="colour-block" id="block-74"><p></p></td>
+          <td class="colour-block" id="block-75"><p></p></td>
+          <td class="colour-block" id="block-76"><p></p></td>
+          <td class="colour-block" id="block-77"><p></p></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div id="text-display">
+      <p>
+        In 2011, the UK's <a href="http://www.dft.gov.uk" title="DfT Site">Department for Transport (DfT)</a>
+        started to issue datasets for public use under the
+        <a href="//www.nationalarchives.gov.uk/doc/open%2Dgovernment%2Dlicence/" title="Usage License">Open&nbsp;Government&nbsp;License</a>. The first of these was planned roadworks issued by the
+        Highways Agency.
+      </p>
+      <p>
+        Presented here is the latest data on planned roadworks on the Highway Agency's roads, distilled
+        from the data files on
+        <a href="//data.gov.uk/dataset/highways_agency_planned_roadworks" title="dataset">this&nbsp;page</a>.
+        You can find information by road number, or search by location. The roadworks that are
+        shown have already started or will start within the next week. Roadworks which should have been
+        complete at least a week ago are filtered out (hopeful, I know).
+      </p>
+      <p>
+        These are the outstanding planned roadworks from the 29 Jun 2015 data file on the site,
+        covering planned roadworks up to the end of 2017. I will keep this page updated
+        as new roadworks are posted on the DfT site, which is currently happening about every two weeks.
+      </p>
+    </div>
+  </div>
+
+  <script src="http://code.jquery.com/jquery.js"></script>
+  <script src="colour.js"></script>
+</body>
 </html>
