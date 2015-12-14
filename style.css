@@ -20,7 +20,7 @@ label {
 }
 
 input {
-    font-family: monospace;
+    font-family: menlo, monaco, monospace;
     font-size: 16px;
     padding: 3px 5px;
 }
@@ -31,12 +31,25 @@ table {
 }
 
 th {
-    border: 1px solid #ccc;
+    border: 1px solid #777;
+    background: #ffe;
+}
+
+table#rgb-hsv td {
+    font-family: menlo, monaco, monospace;
+    text-align: right;
+    border: 1px solid #777;
+    width: 3em;
+    padding: 3px;
+}
+
+table#rgb-hsv td.luma {
+    border: 2px solid #777;
 }
 
 .colour-block {
     width: 7em;
-    background-color: #eee;
+    background-color: #808080;
     color: white;
 }
 
