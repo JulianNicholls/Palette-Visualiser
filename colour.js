@@ -1,5 +1,9 @@
 var colours = ['', '#004fb0', '#002d63', '#197ffc', '#634000', '#b07200', '#000000', '#ffffff'];
 
+var CONST = {
+    ratio_threshold: 4.4,     // Officially it's actually 4.5:1
+};
+
 $(function () {
     for(var i = 1; i <= 5; ++i) {
         var $input = $('#input-' + i);
@@ -44,7 +48,7 @@ function setTableFromColours() {
         $row.find("td.g").text(rgb[1]);
         $row.find("td.b").text(rgb[2]);
 
-        $row.find("td.luma").text(sRGBRelativeLuminance(rgb).toFixed(4));
+        $row.find("td.luma").text(sRGBLuminance(rgb).toFixed(4));
 
         $row.find("td.h").text(Math.round(hsv[0]));
         $row.find("td.s").text(Math.round(hsv[1]));
@@ -61,12 +65,9 @@ function setBlocksFromColours() {
                 rgbF     = rgbStrToArray(colours[fg]),
                 lumaD    = contrastRatio(rgbB, rgbF),
                 suppress = $('input:checked').length === 1,
-                // lumaB   = luma(rgbB),
-                // lumaF   = (fg == bg) ? luma([255, 255, 255]) : luma(rgbF),
-                // lumaD   = Math.round(Math.abs(lumaB - lumaF) * 10) / 10,
-                lumaStr = '<br />' + lumaD + ':1';
+                lumaStr  = '<br />' + lumaD + ':1';
 
-            if(suppress && lumaD < 4.5 || fg == bg) {
+            if((suppress && lumaD < CONST.ratio_threshold) || fg == bg) {
                 $block.css({'background-color': '#888', 'color': '#888'});
             }
             else {
@@ -92,13 +93,6 @@ function rgbStrToArray(colour) {
     return rgb;
 }
 
-// Luma = 0.3 * R + 0.59 * G + 0.11 * B
-
-function luma(rgb) {
-    var rawl = 0.3 * rgb[0] + 0.59 * rgb[1] + 0.11 * rgb[2]
-    return Math.round(rawl * 10) / 10
-}
-
 // The relative brightness of any point in a colorspace, normalized to 0 for
 // darkest black and 1 for lightest white.
 
@@ -114,7 +108,7 @@ function luma(rgb) {
 // GsRGB = G8bit/255
 // BsRGB = B8bit/255
 
-function sRGBRelativeLuminance(rgb) {
+function sRGBLuminance(rgb) {
     var rsrgb = rgb[0] / 255,
         gsrgb = rgb[1] / 255,
         bsrgb = rgb[2] / 255
@@ -129,8 +123,8 @@ function sRGBRelativeLuminance(rgb) {
 // Relative luminance = (Lighter + 0.05) / (Darker + 0.05)
 
 function contrastRatio(rgbA, rgbB) {
-    var a = sRGBRelativeLuminance(rgbA) + 0.05,
-        b = sRGBRelativeLuminance(rgbB) + 0.05;
+    var a = sRGBLuminance(rgbA) + 0.05,
+        b = sRGBLuminance(rgbB) + 0.05;
 
     if(a > b)
         return (a / b).toFixed(2)
