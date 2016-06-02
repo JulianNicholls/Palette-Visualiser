@@ -68,13 +68,18 @@ function setBlocksFromColours() {
                 lumaStr  = '<br />' + lumaD + ':1';
 
             if((suppress && lumaD < CONST.ratio_threshold) || fg == bg) {
-                $block.css({'background-color': '#888', 'color': '#888'});
+                $block.css({
+                  'background-color': '#888',
+                  'color': '#888'}
+                );
             }
             else {
-                $block.css('background-color', colours[bg])
+                var bgStr = colours[bg][0] == '#' ? colours[bg] : '#' + colours[bg];
+                $block.css('background-color', bgStr)
 
                 if(fg != bg) {
-                    $block.css('color', colours[fg]);
+                    var fgStr = colours[fg][0] == '#' ? colours[fg] : '#' + colours[fg];
+                    $block.css('color', fgStr);
                 }
 
                 $block.html(colours[bg] + '<br/>' + colours[fg] + lumaStr);
