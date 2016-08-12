@@ -1,8 +1,9 @@
 body {
-    background: white;
+    background: #d8e8ff;
     color: black;
     font-family: 'Open Sans', 'Helvetica Neue', Helvetica, arial, sans-serif;
     font-size: 16px;
+    box-sizing: border-box;
 }
 
 .container {
@@ -41,7 +42,7 @@ input {
 }
 
 input:focus {
-    background: #f8ffff;
+    background: #f0ffff;
 }
 
 input[type='checkbox'] {
@@ -58,7 +59,7 @@ th {
 }
 
 table#rgb-hsv td {
-    font-family: menlo, monaco, monospace;
+    font-family: menlo, monaco, courier, monospace;
     text-align: right;
     border: 1px solid #777;
     width: 3em;
@@ -66,22 +67,23 @@ table#rgb-hsv td {
 }
 
 td.r, td.g, td.b {
-    background: #f8ffff;
+    background: #f0ffff;
 }
 
 td.h, td.s, td.v {
-    background: #fff8ff;
+    background: #fff0ff;
 }
 
 .colour-block {
     width: 7em;
     background-color: #888;
     color: white;
+    border: 1px solid #666;
 }
 
 .colour-block p {
     height: 4em;
-    margin: 10px;
+    margin: 5px;
     padding: 10px;
     text-align: center;
     line-height: 1.4;
@@ -96,6 +98,6 @@ td.h, td.s, td.v {
 }
 
 #text-display a {
-    color: #bbf;
+    color: #aaf;
     text-decoration: none;
 }
