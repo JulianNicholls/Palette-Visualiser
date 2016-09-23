@@ -1,6 +1,6 @@
-var colours = ['', '#004fb0', '#002d63', '#197ffc', '#634000', '#b07200', '#000000', '#ffffff'];
+let colours = ['', '#004fb0', '#002d63', '#197ffc', '#634000', '#b07200', '#000000', '#ffffff'];
 
-var CONST = {
+const CONST = {
   ratio_threshold: 4.4, // Officially it's actually 4.5:1
 };
 
@@ -38,9 +38,9 @@ $(function() {
 
 function setTableFromColours() {
   for(var i = 1; i <= 5; ++i) {
-    var rgb  = rgbStrToArray(colours[i]),
-        hsv  = RGBtoHSV(rgb[0], rgb[1], rgb[2]),
-        $row = $(`tr#line-${i}`);
+    const rgb  = rgbStrToArray(colours[i]),
+          hsv  = RGBtoHSV(rgb[0], rgb[1], rgb[2]),
+          $row = $(`tr#line-${i}`);
 
     $row.find("td.r").text(rgb[0]);
     $row.find("td.g").text(rgb[1]);
@@ -57,13 +57,13 @@ function setTableFromColours() {
 function setBlocksFromColours() {
   for(var bg = 1; bg <= 7; ++bg) {
     for(var fg = 1; fg <= 7; ++fg) {
-      var $block    = $(`#block-${bg}${fg} p`);
+      let $block    = $(`#block-${bg}${fg} p`);
 
-      var rgbB      = rgbStrToArray(colours[bg]),
+      let rgbB      = rgbStrToArray(colours[bg]),
           rgbF      = rgbStrToArray(colours[fg]),
           lumaD     = contrastRatio(rgbB, rgbF),
           suppress  = $('input:checked').length === 1,
-          lumaStr   = '<br />' + lumaD + ':1';
+          lumaStr   = `<br />${lumaD}:1`;
 
       if((suppress && lumaD < CONST.ratio_threshold) || fg == bg) {
         $block.css({
@@ -72,11 +72,11 @@ function setBlocksFromColours() {
         });
       }
       else {
-        var bgStr = colours[bg][0] == '#' ? colours[bg] : `#${colours[bg]}`;
+        const bgStr = colours[bg][0] == '#' ? colours[bg] : `#${colours[bg]}`;
         $block.css('background-color', bgStr)
 
         if(fg != bg) {
-          var fgStr = colours[fg][0] == '#' ? colours[fg] : `#${colours[fg]}`;
+          const fgStr = colours[fg][0] == '#' ? colours[fg] : `#${colours[fg]}`;
           $block.css('color', fgStr);
         }
 
@@ -87,7 +87,7 @@ function setBlocksFromColours() {
 }
 
 function rgbStrToArray(colour) {
-  var rgb = colour.match(/#?(..)(..)(..)/);
+  const rgb = colour.match(/#?(..)(..)(..)/);
 
   for(var i = 0; i < 3; ++i) {
     rgb[i] = parseInt(rgb[i + 1], 16);
@@ -96,7 +96,19 @@ function rgbStrToArray(colour) {
   return rgb;
 }
 
-// The relative brightness of any point in a colourspace, normalized to 0 for
+// Relative luminance = (Lighter + 0.05) / (Darker + 0.05)
+
+function contrastRatio(rgbA, rgbB) {
+  const a = sRGBLuminance(rgbA) + 0.05,
+        b = sRGBLuminance(rgbB) + 0.05;
+
+  if(a > b)
+    return (a / b).toFixed(2)
+
+  return (b / a).toFixed(2)
+}
+
+// The relative brightness of any point in a colourspace, normalised to 0 for
 // darkest black and 1 for lightest white.
 
 // Note 1: For the sRGB colourspace, the relative luminance of a colour is defined as
@@ -112,27 +124,19 @@ function rgbStrToArray(colour) {
 // BsRGB = B8bit / 255
 
 function sRGBLuminance(rgb) {
-  var rsrgb = rgb[0] / 255,
-      gsrgb = rgb[1] / 255,
-      bsrgb = rgb[2] / 255
+  const rsrgb = rgb[0] / 255,
+        gsrgb = rgb[1] / 255,
+        bsrgb = rgb[2] / 255;
 
-  var r = (rsrgb <= 0.03928) ? rsrgb / 12.92 : Math.pow((rsrgb + 0.055) / 1.055, 2.4),
-      g = (gsrgb <= 0.03928) ? gsrgb / 12.92 : Math.pow((gsrgb + 0.055) / 1.055, 2.4),
-      b = (bsrgb <= 0.03928) ? bsrgb / 12.92 : Math.pow((bsrgb + 0.055) / 1.055, 2.4)
+  const r = mapColour(rsrgb),
+        g = mapColour(gsrgb),
+        b = mapColour(bsrgb);
 
   return 0.2126 * r + 0.7152 * g + 0.0722 * b;
 }
 
-// Relative luminance = (Lighter + 0.05) / (Darker + 0.05)
-
-function contrastRatio(rgbA, rgbB) {
-  var a = sRGBLuminance(rgbA) + 0.05,
-      b = sRGBLuminance(rgbB) + 0.05;
-
-  if(a > b)
-    return (a / b).toFixed(2)
-
-  return (b / a).toFixed(2)
+function mapColour(value) {
+  return (value <= 0.03928) ? (value / 12.92) : Math.pow((value + 0.055) / 1.055, 2.4);
 }
 
 
@@ -151,12 +155,13 @@ function contrastRatio(rgbA, rgbB) {
 function RGBtoHSV(r, g, b) {
   r /= 255, g /= 255, b /= 255;
 
-  var max = Math.max(r, g, b),
-      min = Math.min(r, g, b),
-      v   = max * 100, // V = MAX
-      d   = max - min,
-      s   = (max == 0) ? 0 : (d / max) * 100,
-      h;
+  const max = Math.max(r, g, b),
+        min = Math.min(r, g, b),
+        v   = max * 100, // V = MAX
+        d   = max - min,
+        s   = (max == 0) ? 0 : (d / max) * 100;
+        
+  let   h;
 
   if (max == min) {
     h = 0; // achromatic
