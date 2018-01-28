@@ -1,103 +1,107 @@
 body {
-    background: #d8e8ff;
-    color: black;
-    font-family: 'Open Sans', 'Helvetica Neue', Helvetica, arial, sans-serif;
-    font-size: 16px;
-    box-sizing: border-box;
+  background: #d8e8ff;
+  color: black;
+  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, arial, sans-serif;
+  font-size: 16px;
+  box-sizing: border-box;
 }
 
 .container {
-    width: 960px;
-    margin: 0 auto;
+  width: 960px;
+  margin: 0 auto;
 }
 
 h1 {
-    text-align: center;
+  text-align: center;
 }
 
 div.left-form {
-    float: left;
-    width: 25em;
-    margin: 0 30px 40px 0;
+  float: left;
+  width: 25em;
+  margin: 0 30px 40px 0;
 }
 
 div.right-table {
-    float: left;
+  float: left;
 }
 
 .clearfix {
-    clear: both;
+  clear: both;
 }
 
 label {
-    float: left;
-    width: 4em;
+  float: left;
+  width: 4em;
 }
 
 input {
-    font-family: menlo, monaco, monospace;
-    font-size: 16px;
-    padding: 3px 5px;
-    margin-bottom: 3px;
+  font-family: menlo, monaco, monospace;
+  font-size: 16px;
+  padding: 3px 5px;
+  margin-bottom: 3px;
 }
 
 input:focus {
-    background: #f0ffff;
+  background: #f0ffff;
 }
 
 input[type='checkbox'] {
-    margin-left: 4em;
+  margin-left: 4em;
 }
 
 table {
-    border-collapse: collapse;
+  border-collapse: collapse;
 }
 
 th {
-    border: 1px solid #777;
-    background: #ffe;
+  border: 1px solid #777;
+  background: #ffe;
 }
 
 table#rgb-hsv td {
-    font-family: menlo, monaco, courier, monospace;
-    text-align: right;
-    border: 1px solid #777;
-    width: 3em;
-    padding: 3px 5px;
+  font-family: inconsolata, menlo, monaco, courier, monospace;
+  text-align: right;
+  border: 1px solid #777;
+  width: 3em;
+  padding: 3px 5px;
 }
 
-td.r, td.g, td.b {
-    background: #f0ffff;
+td.r,
+td.g,
+td.b {
+  background: #f0ffff;
 }
 
-td.h, td.s, td.v {
-    background: #fff0ff;
+td.h,
+td.s,
+td.v {
+  background: #fff0ff;
 }
 
 .colour-block {
-    width: 7em;
-    background-color: #888;
-    color: white;
-    border: 1px solid #666;
+  width: 7em;
+  background-color: #888;
+  color: white;
+  border: 1px solid #666;
 }
 
 .colour-block p {
-    height: 4em;
-    margin: 5px;
-    padding: 10px;
-    text-align: center;
-    line-height: 1.4;
+  height: 4em;
+  margin: 5px;
+  padding: 10px;
+  text-align: center;
+  line-height: 1.4;
 }
 
 #text-display {
-    font-size: 16px;
-    margin-top: 20px;
-    padding: 20px;
-    background-color: black;
-    color: white;
+  font-size: 16px;
+  margin-top: 20px;
+  padding: 20px;
+  background-color: black;
+  color: white;
 }
 
 #text-display a {
-    color: #aaf;
-    text-decoration: none;
+  color: #aaf;
+  text-decoration: none;
 }
