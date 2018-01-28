@@ -1,9 +1,9 @@
 # Palette Visualiser
 
-Displays the five colours in every combination from an Adobe Palette created
-at the site that used to be called [Kuler](color.adobe.com).
+Displays the five colours in every combination from an Adobe palette created
+at the site now called [Adobe Color CC](color.adobe.com), previously Kuler.
 
-Now shows the five colours on Black and White backgrounds and specifically
+Now shows the five colours on Black and White backgrounds and
 with Black and White text.
 
 The contrast ratio is now displayed, the calculation is
