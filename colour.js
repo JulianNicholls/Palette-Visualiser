@@ -13,81 +13,85 @@ const CONST = {
   ratio_threshold: 4.4 // Officially it's actually 4.5:1
 };
 
-$(function() {
-  for (let i = 1; i <= 5; ++i) {
-    const $input = $(`#input-${i}`);
+for (let i = 1; i <= 5; ++i) {
+  const inp = document.getElementById(`input-${i}`);
+  const inpText = inp.textContent;
 
-    if ($input.val() == '') $input.val(colours[i]);
+  if (inpText == '') {
+    console.log('Setting');
+    inp.value = colours[i];
   }
+}
 
-  setTableFromColours();
-  setBlocksFromColours();
+setTableFromColours();
+setBlocksFromColours();
 
-  $('.colour-input').on('blur', _ => {
+document.querySelectorAll('.colour-input').forEach(inp =>
+  inp.addEventListener('blur', () => {
     for (let i = 1; i <= 5; ++i) {
-      colours[i] = $(`#input-${i}`).val();
+      colours[i] = document.querySelector(`#input-${i}`).value;
     }
 
     setTableFromColours();
     setBlocksFromColours();
-  });
+  })
+);
 
-  $('#suppress').on('change', _ => setBlocksFromColours());
+document
+  .getElementById('suppress')
+  .addEventListener('change', () => setBlocksFromColours());
 
-  $('.colour-block p').on('click', function() {
-    const $this = $(this);
+document.querySelectorAll('.colour-block p').forEach(para =>
+  para.addEventListener('click', event => {
+    const td = document.getElementById('text-display');
 
-    $('#text-display').css({
-      backgroundColor: $this.css('background-color'),
-      color: $this.css('color')
-    });
-  });
-});
+    td.style.backgroundColor = event.target.style.backgroundColor;
+    td.style.color = event.target.style.color;
+  })
+);
 
 function setTableFromColours() {
   for (let i = 1; i <= 5; ++i) {
     const rgb = rgbStrToArray(colours[i]);
     const hsv = RGBtoHSV(rgb[0], rgb[1], rgb[2]);
-    const $row = $(`tr#line-${i}`);
+    const row = document.querySelector(`tr#line-${i}`);
 
-    $row.find('td.r').text(rgb[0]);
-    $row.find('td.g').text(rgb[1]);
-    $row.find('td.b').text(rgb[2]);
+    row.querySelector('td.r').textContent = rgb[0];
+    row.querySelector('td.g').textContent = rgb[1];
+    row.querySelector('td.b').textContent = rgb[2];
 
-    $row.find('td.luma').text(sRGBLuminance(rgb).toFixed(4));
+    row.querySelector('td.luma').textContent = sRGBLuminance(rgb).toFixed(3);
 
-    $row.find('td.h').text(Math.round(hsv[0]));
-    $row.find('td.s').text(Math.round(hsv[1]));
-    $row.find('td.v').text(Math.round(hsv[2]));
+    row.querySelector('td.h').textContent = Math.round(hsv[0]);
+    row.querySelector('td.s').textContent = Math.round(hsv[1]);
+    row.querySelector('td.v').textContent = Math.round(hsv[2]);
   }
 }
 
 function setBlocksFromColours() {
   for (let bg = 1; bg <= 7; ++bg) {
     for (let fg = 1; fg <= 7; ++fg) {
-      let $block = $(`#block-${bg}${fg} p`);
+      const block = document.querySelector(`#block-${bg}${fg} p`);
 
       const rgbB = rgbStrToArray(colours[bg]);
       const rgbF = rgbStrToArray(colours[fg]);
       const lumaD = contrastRatio(rgbB, rgbF);
-      const suppress = $('input:checked').length === 1;
+      const suppress = document.querySelector('input:checked');
       const lumaStr = `<br />${lumaD}:1`;
 
       if ((suppress && lumaD < CONST.ratio_threshold) || fg === bg) {
-        $block.css({
-          'background-color': '#888',
-          color: '#888'
-        });
+        block.style.backgroundColor = '#888';
+        block.style.color = '#888';
       } else {
         const bgStr = colours[bg][0] == '#' ? colours[bg] : `#${colours[bg]}`;
-        $block.css('background-color', bgStr);
+        block.style.backgroundColor = bgStr;
 
         if (fg !== bg) {
           const fgStr = colours[fg][0] == '#' ? colours[fg] : `#${colours[fg]}`;
-          $block.css('color', fgStr);
+          block.style.color = fgStr;
         }
 
-        $block.html(`${colours[bg]}<br/>${colours[fg]}${lumaStr}`);
+        block.innerHTML = `${colours[bg]}<br/>${colours[fg]}${lumaStr}`;
       }
     }
   }
@@ -168,13 +172,11 @@ function RGBtoHSV(r, g, b) {
   const min = Math.min(r, g, b);
   const v = max * 100; // V = MAX
   const d = max - min;
-  const s = max == 0 ? 0 : d / max * 100;
+  const s = max == 0 ? 0 : d / v;
 
-  let h;
+  let h = 0;
 
-  if (max === min) {
-    h = 0; // achromatic
-  } else {
+  if (max !== min) {
     switch (max) {
       case r:
         h = (g - b) / d + (g < b ? 6 : 0);
