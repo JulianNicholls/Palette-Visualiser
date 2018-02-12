@@ -1,10 +1,10 @@
 let colours = [
   '',
-  '#004fb0',
-  '#002d63',
-  '#197ffc',
-  '#634000',
-  '#b07200',
+  '#2020b0',
+  '#6820b0',
+  '#b020b0',
+  '#b02068',
+  '#b02020',
   '#000000',
   '#ffffff'
 ];
@@ -54,6 +54,7 @@ function setTableFromColours() {
   for (let i = 1; i <= 5; ++i) {
     const rgb = rgbStrToArray(colours[i]);
     const hsv = RGBtoHSV(rgb[0], rgb[1], rgb[2]);
+    const hsl = HSVtoHSL(hsv[0], hsv[1], hsv[2]);
     const row = document.querySelector(`tr#line-${i}`);
 
     row.querySelector('td.r').textContent = rgb[0];
@@ -63,8 +64,10 @@ function setTableFromColours() {
     row.querySelector('td.luma').textContent = sRGBLuminance(rgb).toFixed(3);
 
     row.querySelector('td.h').textContent = Math.round(hsv[0]);
-    row.querySelector('td.s').textContent = Math.round(hsv[1]);
-    row.querySelector('td.v').textContent = Math.round(hsv[2]);
+    row.querySelector('td.s').textContent = Math.round(hsv[1]) + '%';
+    row.querySelector('td.v').textContent = Math.round(hsv[2]) + '%';
+    row.querySelector('td.sls').textContent = Math.round(hsl[1]) + '%';
+    row.querySelector('td.sll').textContent = Math.round(hsl[2]) + '%';
   }
 }
 
@@ -160,7 +163,7 @@ function mapColour(value) {
  * @param   Number  r       The red colour value
  * @param   Number  g       The green colour value
  * @param   Number  b       The blue colour value
- * @return  Array           The HSV representation
+ * @return  Array           The HSV representation [0..360, 0..100%, 0..100%]
  */
 
 function RGBtoHSV(r, g, b) {
@@ -172,7 +175,7 @@ function RGBtoHSV(r, g, b) {
   const min = Math.min(r, g, b);
   const v = max * 100; // V = MAX
   const d = max - min;
-  const s = max == 0 ? 0 : d / v;
+  const s = max == 0 ? 0 : d / max * 100;
 
   let h = 0;
 
@@ -195,4 +198,34 @@ function RGBtoHSV(r, g, b) {
   }
 
   return [h, s, v];
+}
+
+/**
+ * Converts an HSV colour value to HSL. Conversion formula
+ * adapted from Bob's answer on
+ * https://stackoverflow.com/questions/3423214/convert-hsb-hsv-color-to-hsl
+ *
+ * @param   Number  h       Hue                 0..360
+ * @param   Number  s       Saturation          0..100%
+ * @param   Number  v       Value / Brightness  0..100%
+ * @return  Array           The HSL representation [0..360, 0..100%, 0..100%]
+ */
+
+function HSVtoHSL(h, s, v) {
+  s /= 100;
+  v /= 100;
+
+  const l = (2 - s) * v / 2; // l -> 0..1
+
+  if (l != 0) {
+    if (l == 1) {
+      s = 0;
+    } else if (l < 0.5) {
+      s = s * v / (l * 2);
+    } else {
+      s = s * v / (2 - l * 2);
+    }
+  }
+
+  return [h, s * 100, l * 100];
 }
