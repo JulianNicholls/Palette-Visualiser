@@ -63,7 +63,7 @@ function setTableFromColours() {
 
     row.querySelector('td.luma').textContent = sRGBLuminance(rgb).toFixed(3);
 
-    row.querySelector('td.h').textContent = Math.round(hsv[0]);
+    row.querySelector('td.h').innerHTML = Math.round(hsv[0]) + '&deg;';
     row.querySelector('td.s').textContent = Math.round(hsv[1]) + '%';
     row.querySelector('td.v').textContent = Math.round(hsv[2]) + '%';
     row.querySelector('td.sls').textContent = Math.round(hsl[1]) + '%';
@@ -149,9 +149,7 @@ function sRGBLuminance(rgb) {
 }
 
 function mapColour(value) {
-  return value <= 0.03928
-    ? value / 12.92
-    : Math.pow((value + 0.055) / 1.055, 2.4);
+  return value <= 0.03928 ? value / 12.92 : Math.pow((value + 0.055) / 1.055, 2.4);
 }
 
 /**

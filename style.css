@@ -73,12 +73,27 @@ tr.blocks th:first-of-type {
   min-width: 6em;
 }
 
+table#rgb-hsv {
+  border: 2px solid #777;
+}
+
+table#rgb-hsv th {
+  border-right-width: 2px;
+}
+
 table#rgb-hsv td {
   font-family: menlo, monaco, courier, monospace;
   text-align: right;
   border: 1px solid #777;
   width: 3em;
   padding: 5px 6px;
+}
+
+table#rgb-hsv td.b,
+table#rgb-hsv td.luma,
+table#rgb-hsv td.h,
+table#rgb-hsv td.v {
+  border-right-width: 2px;
 }
 
 td.r,
