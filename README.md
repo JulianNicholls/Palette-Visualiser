@@ -12,3 +12,5 @@ the above spec, 4.4:1 here.
 
 In addition to HSB/V, HSL is now displayed. Fairly obviously, these are the values which
 are entered into an hsl() or hsla() CSS colour specification.
+
+It is now possible to edit the H,S, and L values directly.
