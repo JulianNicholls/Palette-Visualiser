@@ -1,6 +1,6 @@
 body {
-  background: #d8e8ff;
-  color: black;
+  background: #f8f8f8;
+  color: #111;
   font-family: 'Open Sans', 'Helvetica Neue', Helvetica, arial, sans-serif;
   font-size: 16px;
   box-sizing: border-box;
@@ -20,7 +20,7 @@ h1 {
 
 div.left-form {
   float: left;
-  width: 23em;
+  width: 24em;
   margin: 0 30px 30px 0;
 }
 
@@ -39,11 +39,15 @@ label {
 }
 
 input {
-  font-family: menlo, monaco, courier, monospace;
+  font-family: 'Input Mono', menlo, monaco, courier, monospace;
   font-size: 16px;
   padding: 4px 6px;
   margin-bottom: 3px;
   text-transform: uppercase;
+}
+
+.colour-input {
+  margin-right: 12px;
 }
 
 input:focus {
@@ -92,6 +96,7 @@ table#rgb-hsv td {
 table#rgb-hsv td.b,
 table#rgb-hsv td.luma,
 table#rgb-hsv td.h,
+table#rgb-hsv td.s,
 table#rgb-hsv td.v {
   border-right-width: 2px;
 }
@@ -102,15 +107,14 @@ td.b {
   background: #f0ffff;
 }
 
+td.luma {
+  background: #e0e0ff;
+}
+
 td.h,
 td.s,
 td.v {
   background: #fff0ff;
-}
-
-td.sls,
-td.sll {
-  background: #ffe0ff;
 }
 
 .colour-block {
@@ -129,12 +133,14 @@ td.sll {
   text-transform: uppercase;
 }
 
+/* Text display at the end */
+
 #text-display {
   font-size: 16px;
   margin-top: 20px;
   padding: 10px;
-  background-color: black;
-  color: white;
+  background-color: #111;
+  color: #f8f8f8;
   border-radius: 5px;
 }
 

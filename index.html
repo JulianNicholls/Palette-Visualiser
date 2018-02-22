@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Palette Visualiser</title>
+  <title>Palette Visualiser 2.0</title>
   <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" type="text/css" href="style.css">
 </head>
@@ -18,25 +18,40 @@
 
           <label for="input-1">Base</label>
           <input type="text" class="colour-input" id="input-1" tabindex="1" size="8" autofocus="true">
+          <input type="text" class="hsl-input" id="input-h1" tabindex="2" size="3">
+          <input type="text" class="hsl-input" id="input-s1" tabindex="3" size="3">
+          <input type="text" class="hsl-input" id="input-l1" tabindex="4" size="3">
           <br>
 
           <label for="input-2">One</label>
-          <input type="text" class="colour-input" id="input-2" tabindex="2" size="8">
+          <input type="text" class="colour-input" id="input-2" tabindex="5" size="8">
+          <input type="text" class="hsl-input" id="input-h2" tabindex="6" size="3">
+          <input type="text" class="hsl-input" id="input-s2" tabindex="7" size="3">
+          <input type="text" class="hsl-input" id="input-l2" tabindex="8" size="3">
           <br>
 
           <label for="input-3">Two</label>
-          <input type="text" class="colour-input" id="input-3" tabindex="3" size="8">
+          <input type="text" class="colour-input" id="input-3" tabindex="9" size="8">
+          <input type="text" class="hsl-input" id="input-h3" tabindex="10" size="3">
+          <input type="text" class="hsl-input" id="input-s3" tabindex="11" size="3">
+          <input type="text" class="hsl-input" id="input-l3" tabindex="12" size="3">
           <br>
 
           <label for="input-4">Three</label>
-          <input type="text" class="colour-input" id="input-4" tabindex="4" size="8">
+          <input type="text" class="colour-input" id="input-4" tabindex="13" size="8">
+          <input type="text" class="hsl-input" id="input-h4" tabindex="14" size="3">
+          <input type="text" class="hsl-input" id="input-s4" tabindex="15" size="3">
+          <input type="text" class="hsl-input" id="input-l4" tabindex="16" size="3">
           <br>
 
           <label for="input-5">Four</label>
-          <input type="text" class="colour-input" id="input-5" tabindex="5" size="8">
+          <input type="text" class="colour-input" id="input-5" tabindex="17" size="8">
+          <input type="text" class="hsl-input" id="input-h5" tabindex="18" size="3">
+          <input type="text" class="hsl-input" id="input-s5" tabindex="19" size="3">
+          <input type="text" class="hsl-input" id="input-l5" tabindex="20" size="3">
           <br>
 
-          <input type="checkbox" id="suppress" value="suppress" /> Hide low-contrast combinations
+          <input type="checkbox" id="suppress" value="suppress" checked="checked" /> Hide low-contrast combinations
         </fieldset>
       </form>
     </div>
@@ -47,8 +62,8 @@
           <th colspan="3">RGB</th>
           <th class="luma">Luma</th>
           <th class="h">H</th>
-          <th class="s" colspan="2">SV</th>
-          <th class="sls" colspan="2">SL</th>
+          <th class="s">S</th>
+          <th class="v">V</th>
         </thead>
         <tbody>
           <tr id="line-1">
@@ -59,8 +74,6 @@
             <td class="h">213</td>
             <td class="s">100</td>
             <td class="v">69</td>
-            <td class="sls">xx</td>
-            <td class="sll">xx</td>
           </tr>
 
           <tr id="line-2">
@@ -71,8 +84,6 @@
             <td class="h">213</td>
             <td class="s">100</td>
             <td class="v">69</td>
-            <td class="sls">xx</td>
-            <td class="sll">xx</td>
           </tr>
 
           <tr id="line-3">
@@ -83,8 +94,6 @@
             <td class="h">213</td>
             <td class="s">100</td>
             <td class="v">69</td>
-            <td class="sls">xx</td>
-            <td class="sll">xx</td>
           </tr>
 
           <tr id="line-4">
@@ -95,8 +104,6 @@
             <td class="h">213</td>
             <td class="s">100</td>
             <td class="v">69</td>
-            <td class="sls">xx</td>
-            <td class="sll">xx</td>
           </tr>
 
           <tr id="line-5">
@@ -107,8 +114,6 @@
             <td class="h">213</td>
             <td class="s">100</td>
             <td class="v">69</td>
-            <td class="sls">xx</td>
-            <td class="sll">xx</td>
           </tr>
         </tbody>
       </table>

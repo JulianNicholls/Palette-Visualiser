@@ -1,24 +1,22 @@
 let colours = [
   '',
-  '#2020b0',
-  '#6820b0',
-  '#b020b0',
-  '#b02068',
-  '#b02020',
+  '#333366',
+  '#336666',
+  '#663366',
+  '#663333',
+  '#336699',
   '#000000',
   '#ffffff'
 ];
 
 const CONST = {
-  ratio_threshold: 4.4 // Officially it's actually 4.5:1
+  ratio_threshold: 4.4 // Officially, it's 4.5:1
 };
 
 for (let i = 1; i <= 5; ++i) {
   const inp = document.getElementById(`input-${i}`);
-  const inpText = inp.textContent;
 
-  if (inpText == '') {
-    console.log('Setting');
+  if (inp.textContent == '') {
     inp.value = colours[i];
   }
 }
@@ -27,28 +25,57 @@ setTableFromColours();
 setBlocksFromColours();
 
 document.querySelectorAll('.colour-input').forEach(inp =>
-  inp.addEventListener('blur', () => {
-    for (let i = 1; i <= 5; ++i) {
-      colours[i] = document.querySelector(`#input-${i}`).value;
-    }
+  inp.addEventListener('blur', event => {
+    const elem = event.target;
+    const id = elem.id;
+    const input_num = parseInt(id[id.length - 1]);
+
+    colours[input_num] = elem.value;
 
     setTableFromColours();
     setBlocksFromColours();
   })
 );
 
-document
-  .getElementById('suppress')
-  .addEventListener('change', () => setBlocksFromColours());
+document.querySelectorAll('.hsl-input').forEach(inp =>
+  inp.addEventListener('blur', event => {
+    const id = event.target.id;
+    const input_num = parseInt(id[id.length - 1]);
 
-document.querySelectorAll('.colour-block p').forEach(para =>
-  para.addEventListener('click', event => {
-    const td = document.getElementById('text-display');
+    const h = document.getElementById(`input-h${input_num}`).value;
+    const s = document.getElementById(`input-s${input_num}`).value;
+    const l = document.getElementById(`input-l${input_num}`).value;
 
-    td.style.backgroundColor = event.target.style.backgroundColor;
-    td.style.color = event.target.style.color;
+    const rgb = HSLtoRGB(h, s, l);
+    // const rgbStr = `#${toHexStr(rgb[0])}${toHexStr(rgb[1])}${toHexStr(rgb[2])}`;
+    const rgbStr = '#' + rgb.map(value => toHexStr(value)).join('');
+
+    colours[input_num] = rgbStr;
+    document.getElementById(`input-${input_num}`).value = rgbStr;
+
+    setTableFromColours();
+    setBlocksFromColours();
   })
 );
+
+document.getElementById('suppress').addEventListener('change', setBlocksFromColours);
+
+document
+  .querySelectorAll('.colour-block p')
+  .forEach(para => para.addEventListener('click', colourTextDisplay));
+
+function toHexStr(dec) {
+  const str = dec.toString(16).toUpperCase();
+
+  return dec < 16 ? '0' + str : str;
+}
+
+function colourTextDisplay(event) {
+  const td = document.getElementById('text-display');
+
+  td.style.backgroundColor = event.target.style.backgroundColor;
+  td.style.color = event.target.style.color;
+}
 
 function setTableFromColours() {
   for (let i = 1; i <= 5; ++i) {
@@ -57,41 +84,46 @@ function setTableFromColours() {
     const hsl = HSVtoHSL(hsv[0], hsv[1], hsv[2]);
     const row = document.querySelector(`tr#line-${i}`);
 
+    document.getElementById(`input-h${i}`).value = hsl[0];
+    document.getElementById(`input-s${i}`).value = hsl[1];
+    document.getElementById(`input-l${i}`).value = hsl[2];
+
     row.querySelector('td.r').textContent = rgb[0];
     row.querySelector('td.g').textContent = rgb[1];
     row.querySelector('td.b').textContent = rgb[2];
 
     row.querySelector('td.luma').textContent = sRGBLuminance(rgb).toFixed(3);
 
-    row.querySelector('td.h').innerHTML = Math.round(hsv[0]) + '&deg;';
-    row.querySelector('td.s').textContent = Math.round(hsv[1]) + '%';
-    row.querySelector('td.v').textContent = Math.round(hsv[2]) + '%';
-    row.querySelector('td.sls').textContent = Math.round(hsl[1]) + '%';
-    row.querySelector('td.sll').textContent = Math.round(hsl[2]) + '%';
+    row.querySelector('td.h').innerHTML = hsv[0] + '&deg;';
+    row.querySelector('td.s').textContent = hsv[1] + '%';
+    row.querySelector('td.v').textContent = hsv[2] + '%';
   }
 }
 
 function setBlocksFromColours() {
+  const suppress = document.querySelector('input:checked');
+
   for (let bg = 1; bg <= 7; ++bg) {
     for (let fg = 1; fg <= 7; ++fg) {
-      const block = document.querySelector(`#block-${bg}${fg} p`);
-
       const rgbB = rgbStrToArray(colours[bg]);
       const rgbF = rgbStrToArray(colours[fg]);
       const lumaD = contrastRatio(rgbB, rgbF);
-      const suppress = document.querySelector('input:checked');
       const lumaStr = `<br />${lumaD}:1`;
+
+      const block = document.querySelector(`#block-${bg}${fg} p`);
 
       if ((suppress && lumaD < CONST.ratio_threshold) || fg === bg) {
         block.style.backgroundColor = '#888';
         block.style.color = '#888';
       } else {
-        const bgStr = colours[bg][0] == '#' ? colours[bg] : `#${colours[bg]}`;
-        block.style.backgroundColor = bgStr;
+        if (colours[bg][0] !== '#') colours[bg] = `#${colours[bg]}`;
+
+        block.style.backgroundColor = colours[bg];
 
         if (fg !== bg) {
-          const fgStr = colours[fg][0] == '#' ? colours[fg] : `#${colours[fg]}`;
-          block.style.color = fgStr;
+          if (colours[fg][0] !== '#') colours[fg] = `#${colours[fg]}`;
+
+          block.style.color = colours[fg];
         }
 
         block.innerHTML = `${colours[bg]}<br/>${colours[fg]}${lumaStr}`;
@@ -137,13 +169,9 @@ function contrastRatio(rgbA, rgbB) {
 // BsRGB = B8bit / 255
 
 function sRGBLuminance(rgb) {
-  const rsrgb = rgb[0] / 255;
-  const gsrgb = rgb[1] / 255;
-  const bsrgb = rgb[2] / 255;
-
-  const r = mapColour(rsrgb);
-  const g = mapColour(gsrgb);
-  const b = mapColour(bsrgb);
+  const r = mapColour(rgb[0] / 255);
+  const g = mapColour(rgb[1] / 255);
+  const b = mapColour(rgb[2] / 255);
 
   return 0.2126 * r + 0.7152 * g + 0.0722 * b;
 }
@@ -155,13 +183,11 @@ function mapColour(value) {
 /**
  * Converts an RGB colour value to HSV. Conversion formula
  * adapted from http://en.wikipedia.org/wiki/HSV_color_space.
- * Assumes r, g, and b are contained in the set [0, 255] and
- * returns h as 0 to 360, and s and v as percentage.
  *
- * @param   Number  r       The red colour value
- * @param   Number  g       The green colour value
- * @param   Number  b       The blue colour value
- * @return  Array           The HSV representation [0..360, 0..100%, 0..100%]
+ * @param   Number  r       The red colour value    0..255
+ * @param   Number  g       The green colour value  0..255
+ * @param   Number  b       The blue colour value   0..255
+ * @return  Array           The HSV representation  [0..360, 0..100%, 0..100%]
  */
 
 function RGBtoHSV(r, g, b) {
@@ -195,7 +221,7 @@ function RGBtoHSV(r, g, b) {
     h *= 60;
   }
 
-  return [h, s, v];
+  return [Math.round(h), Math.round(s), Math.round(v)];
 }
 
 /**
@@ -225,5 +251,49 @@ function HSVtoHSL(h, s, v) {
     }
   }
 
-  return [h, s * 100, l * 100];
+  return [Math.round(h), Math.round(s * 100), Math.round(l * 100)];
+}
+
+/**
+ * Converts an HSL colour value to RGB. Conversion formula
+ * adapted from http://en.wikipedia.org/wiki/HSV_color_space.
+ *
+ * @param   Number  h       Hue         0..360
+ * @param   Number  s       Saturation  0..100%
+ * @param   Number  l       Luminance   0..100%
+ * @return  Array           The RGB representation [0..255, 0..255, 0..255]
+ */
+
+function HSLtoRGB(h, s, l) {
+  s /= 100; // % -> 0..1
+  l /= 100;
+
+  const c = (1 - Math.abs(2 * l - 1)) * s;
+  const hp = h / 60.0;
+  const x = c * (1 - Math.abs(hp % 2 - 1));
+  const m = l - c / 2;
+
+  let r, g, b;
+
+  if (hp >= 0 && hp <= 1) {
+    [r, g, b] = [c, x, 0];
+  } else if (hp >= 1 && hp <= 2) {
+    [r, g, b] = [x, c, 0];
+  } else if (hp >= 2 && hp <= 3) {
+    [r, g, b] = [0, c, x];
+  } else if (hp >= 3 && hp <= 4) {
+    [r, g, b] = [0, x, c];
+  } else if (hp >= 4 && hp <= 5) {
+    [r, g, b] = [x, 0, c];
+  } else if (hp >= 5 && hp <= 6) {
+    [r, g, b] = [c, 0, x];
+  } else {
+    [r, g, b] = [0.9, 0.9, 0.9];
+  }
+
+  return [
+    Math.round((r + m) * 255),
+    Math.round((g + m) * 255),
+    Math.round((b + m) * 255)
+  ];
 }
