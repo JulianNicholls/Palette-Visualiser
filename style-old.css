@@ -1,0 +1,144 @@
+body {
+  background: #d8e8ff;
+  color: black;
+  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, arial, sans-serif;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+.container {
+  min-width: 960px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+h1 {
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+div.left-form {
+  float: left;
+  width: 23em;
+  margin: 0 30px 30px 0;
+}
+
+div.right-table {
+  margin-top: 10px;
+  float: left;
+}
+
+.clearfix {
+  clear: both;
+}
+
+label {
+  float: left;
+  width: 4em;
+}
+
+input {
+  font-family: 'Input Mono', menlo, monaco, courier, monospace;
+  font-size: 16px;
+  padding: 4px 6px;
+  margin-bottom: 3px;
+  text-transform: uppercase;
+}
+
+input:focus {
+  background: #f0ffff;
+}
+
+input[type='checkbox'] {
+  margin-top: 10px;
+  margin-left: 4em;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+th {
+  border: 1px solid #777;
+  background: #ffe;
+  padding: 3px 5px;
+}
+
+th.luma {
+  min-width: 4em;
+}
+
+tr.blocks th:first-of-type {
+  min-width: 6em;
+}
+
+table#rgb-hsv {
+  border: 2px solid #777;
+}
+
+table#rgb-hsv th {
+  border-right-width: 2px;
+}
+
+table#rgb-hsv td {
+  font-family: menlo, monaco, courier, monospace;
+  text-align: right;
+  border: 1px solid #777;
+  width: 3em;
+  padding: 5px 6px;
+}
+
+table#rgb-hsv td.b,
+table#rgb-hsv td.luma,
+table#rgb-hsv td.h,
+table#rgb-hsv td.v {
+  border-right-width: 2px;
+}
+
+td.r,
+td.g,
+td.b {
+  background: #f0ffff;
+}
+
+td.h,
+td.s,
+td.v {
+  background: #fff0ff;
+}
+
+td.sls,
+td.sll {
+  background: #ffe0ff;
+}
+
+.colour-block {
+  width: 7em;
+  background-color: #888;
+  color: white;
+  border: 1px solid #666;
+}
+
+.colour-block p {
+  margin: 5px;
+  padding: 10px;
+  text-align: center;
+  line-height: 1.4;
+  cursor: pointer;
+  text-transform: uppercase;
+}
+
+#text-display {
+  font-size: 16px;
+  margin-top: 20px;
+  padding: 10px;
+  background-color: black;
+  color: white;
+  border-radius: 5px;
+}
+
+#text-display a {
+  color: #aaf;
+  text-decoration: none;
+}
