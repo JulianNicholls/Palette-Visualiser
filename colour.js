@@ -24,39 +24,13 @@ for (let i = 1; i <= 5; ++i) {
 setTableFromColours();
 setBlocksFromColours();
 
-document.querySelectorAll('.colour-input').forEach(inp =>
-  inp.addEventListener('blur', event => {
-    const elem = event.target;
-    const id = elem.id;
-    const input_num = parseInt(id[id.length - 1]);
+document
+  .querySelectorAll('.colour-input')
+  .forEach(inp => inp.addEventListener('change', setFromRGB));
 
-    colours[input_num] = elem.value;
-
-    setTableFromColours();
-    setBlocksFromColours();
-  })
-);
-
-document.querySelectorAll('.hsl-input').forEach(inp =>
-  inp.addEventListener('blur', event => {
-    const id = event.target.id;
-    const input_num = parseInt(id[id.length - 1]);
-
-    const h = document.getElementById(`input-h${input_num}`).value;
-    const s = document.getElementById(`input-s${input_num}`).value;
-    const l = document.getElementById(`input-l${input_num}`).value;
-
-    const rgb = HSLtoRGB(h, s, l);
-    // const rgbStr = `#${toHexStr(rgb[0])}${toHexStr(rgb[1])}${toHexStr(rgb[2])}`;
-    const rgbStr = '#' + rgb.map(value => toHexStr(value)).join('');
-
-    colours[input_num] = rgbStr;
-    document.getElementById(`input-${input_num}`).value = rgbStr;
-
-    setTableFromColours();
-    setBlocksFromColours();
-  })
-);
+document
+  .querySelectorAll('.hsl-input')
+  .forEach(inp => inp.addEventListener('change', setFromHSL));
 
 document.getElementById('suppress').addEventListener('change', setBlocksFromColours);
 
@@ -64,17 +38,47 @@ document
   .querySelectorAll('.colour-block p')
   .forEach(para => para.addEventListener('click', colourTextDisplay));
 
-function toHexStr(dec) {
-  const str = dec.toString(16).toUpperCase();
+function setFromRGB(event) {
+  const elem = event.target;
+  const id = elem.id;
+  const input_num = parseInt(id[id.length - 1]);
 
-  return dec < 16 ? '0' + str : str;
+  colours[input_num] = elem.value;
+
+  setTableFromColours();
+  setBlocksFromColours();
+}
+
+function setFromHSL(event) {
+  const toHexStr = dec => {
+    const str = dec.toString(16).toUpperCase();
+
+    return dec < 16 ? '0' + str : str;
+  };
+
+  const id = event.target.id;
+  const input_num = parseInt(id[id.length - 1]);
+
+  const h = document.getElementById(`input-h${input_num}`).value;
+  const s = document.getElementById(`input-s${input_num}`).value;
+  const l = document.getElementById(`input-l${input_num}`).value;
+
+  const rgb = HSLtoRGB(h, s, l);
+  const rgbStr = '#' + rgb.map(value => toHexStr(value)).join('');
+
+  colours[input_num] = rgbStr;
+  document.getElementById(`input-${input_num}`).value = rgbStr;
+
+  setTableFromColours();
+  setBlocksFromColours();
 }
 
 function colourTextDisplay(event) {
   const td = document.getElementById('text-display');
+  const style = event.target.style;
 
-  td.style.backgroundColor = event.target.style.backgroundColor;
-  td.style.color = event.target.style.color;
+  td.style.backgroundColor = style.backgroundColor;
+  td.style.color = style.color;
 }
 
 function setTableFromColours() {
@@ -142,7 +146,9 @@ function rgbStrToArray(colour) {
   return rgb;
 }
 
-// Relative luminance = (Lighter + 0.05) / (Darker + 0.05)
+/**
+ * Relative luminance = (Lighter + 0.05) / (Darker + 0.05)
+ */
 
 function contrastRatio(rgbA, rgbB) {
   const a = sRGBLuminance(rgbA) + 0.05;
@@ -153,31 +159,32 @@ function contrastRatio(rgbA, rgbB) {
   return (b / a).toFixed(2);
 }
 
-// The relative brightness of any point in a colourspace, normalised to 0 for
-// darkest black and 1 for lightest white.
-
-// Note 1: For the sRGB colourspace, the relative luminance of a colour is defined as
-//   L = 0.2126 * R + 0.7152 * G + 0.0722 * B where R, G and B are defined as:
-
-// if RsRGB <= 0.03928 then R = RsRGB/12.92 else R = ((RsRGB+0.055)/1.055) ^ 2.4
-// if GsRGB <= 0.03928 then G = GsRGB/12.92 else G = ((GsRGB+0.055)/1.055) ^ 2.4
-// if BsRGB <= 0.03928 then B = BsRGB/12.92 else B = ((BsRGB+0.055)/1.055) ^ 2.4
-// and RsRGB, GsRGB, and BsRGB are defined as:
-
-// RsRGB = R8bit / 255
-// GsRGB = G8bit / 255
-// BsRGB = B8bit / 255
+/**
+ * The relative brightness of any point in a colourspace, normalised to 0 for
+ * darkest black and 1 for lightest white.
+ 
+ * Note 1: For the sRGB colourspace, the relative luminance of a colour is defined as
+ *   L = 0.2126 * R + 0.7152 * G + 0.0722 * B where R, G and B are defined as:
+ 
+ * if RsRGB <= 0.03928 then R = RsRGB/12.92 else R = ((RsRGB+0.055)/1.055) ^ 2.4
+ * if GsRGB <= 0.03928 then G = GsRGB/12.92 else G = ((GsRGB+0.055)/1.055) ^ 2.4
+ * if BsRGB <= 0.03928 then B = BsRGB/12.92 else B = ((BsRGB+0.055)/1.055) ^ 2.4
+ * and RsRGB, GsRGB, and BsRGB are defined as:
+ 
+ * RsRGB = R8bit / 255
+ * GsRGB = G8bit / 255
+ * BsRGB = B8bit / 255
+*/
 
 function sRGBLuminance(rgb) {
+  const mapColour = value =>
+    value <= 0.03928 ? value / 12.92 : Math.pow((value + 0.055) / 1.055, 2.4);
+
   const r = mapColour(rgb[0] / 255);
   const g = mapColour(rgb[1] / 255);
   const b = mapColour(rgb[2] / 255);
 
   return 0.2126 * r + 0.7152 * g + 0.0722 * b;
-}
-
-function mapColour(value) {
-  return value <= 0.03928 ? value / 12.92 : Math.pow((value + 0.055) / 1.055, 2.4);
 }
 
 /**
@@ -288,7 +295,7 @@ function HSLtoRGB(h, s, l) {
   } else if (hp >= 5 && hp <= 6) {
     [r, g, b] = [c, 0, x];
   } else {
-    [r, g, b] = [0.9, 0.9, 0.9];
+    [r, g, b] = [0.9, 0.9, 0.9]; // Should never hit this
   }
 
   return [
