@@ -13,14 +13,17 @@ const CONST = {
   ratio_threshold: 4.4 // Officially, it's 4.5:1
 };
 
-for (let i = 1; i <= 5; ++i) {
-  const inp = document.getElementById(`input-${i}`);
+const rgb_inputs = [
+  document.getElementById('input-1'),
+  document.getElementById('input-2'),
+  document.getElementById('input-3'),
+  document.getElementById('input-4'),
+  document.getElementById('input-5')
+];
 
-  if (inp.textContent == '') {
-    inp.value = colours[i];
-  }
-}
+if (rgb_inputs[0].value === '') loadColourData();
 
+setHSLsFromRGBs();
 setTableFromColours();
 setBlocksFromColours();
 
@@ -38,6 +41,16 @@ document
   .querySelectorAll('.colour-block p')
   .forEach(para => para.addEventListener('click', colourTextDisplay));
 
+function loadColourData() {
+  const saveData = localStorage.getItem('show49');
+
+  if (saveData) colours = JSON.parse(saveData);
+
+  rgb_inputs.forEach((input, idx) => {
+    input.value = colours[idx + 1];
+  });
+}
+
 function setFromRGB(event) {
   const elem = event.target;
   const id = elem.id;
@@ -45,8 +58,10 @@ function setFromRGB(event) {
 
   colours[input_num] = elem.value;
 
+  setHSLsFromRGBs();
   setTableFromColours();
   setBlocksFromColours();
+  localStorage.setItem('show49', JSON.stringify(colours));
 }
 
 function setFromHSL(event) {
@@ -67,10 +82,11 @@ function setFromHSL(event) {
   const rgbStr = '#' + rgb.map(value => toHexStr(value)).join('');
 
   colours[input_num] = rgbStr;
-  document.getElementById(`input-${input_num}`).value = rgbStr;
+  rgb_inputs[input_num - 1].value = rgbStr;
 
   setTableFromColours();
   setBlocksFromColours();
+  localStorage.setItem('show49', JSON.stringify(colours));
 }
 
 function colourTextDisplay(event) {
@@ -81,16 +97,23 @@ function colourTextDisplay(event) {
   td.style.color = style.color;
 }
 
-function setTableFromColours() {
+function setHSLsFromRGBs() {
   for (let i = 1; i <= 5; ++i) {
     const rgb = rgbStrToArray(colours[i]);
     const hsv = RGBtoHSV(rgb[0], rgb[1], rgb[2]);
     const hsl = HSVtoHSL(hsv[0], hsv[1], hsv[2]);
-    const row = document.querySelector(`tr#line-${i}`);
 
     document.getElementById(`input-h${i}`).value = hsl[0];
     document.getElementById(`input-s${i}`).value = hsl[1];
     document.getElementById(`input-l${i}`).value = hsl[2];
+  }
+}
+
+function setTableFromColours() {
+  for (let i = 1; i <= 5; ++i) {
+    const rgb = rgbStrToArray(colours[i]);
+    const hsv = RGBtoHSV(rgb[0], rgb[1], rgb[2]);
+    const row = document.querySelector(`tr#line-${i}`);
 
     row.querySelector('td.r').textContent = rgb[0];
     row.querySelector('td.g').textContent = rgb[1];
