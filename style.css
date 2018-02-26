@@ -97,7 +97,7 @@ table#rgb-hsv th {
 table#rgb-hsv td {
   border: 1px solid #777;
   font-family: menlo, monaco, courier, monospace;
-  padding: 5px 6px;
+  padding: 5px 10px;
   text-align: right;
   width: 3em;
 }

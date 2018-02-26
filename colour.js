@@ -197,11 +197,16 @@ function contrastRatio(rgbA, rgbB) {
  * RsRGB = R8bit / 255
  * GsRGB = G8bit / 255
  * BsRGB = B8bit / 255
+ * 
+ * I have subsequently discovered 
+ * (here: http://entropymine.com/imageworsener/srgbformula/)
+ * that the cutoff point 0.03928, used with 12.92, is probably 
+ * wrong, so I am going to use 0.04045 from now on.
 */
 
 function sRGBLuminance(rgb) {
   const mapColour = value =>
-    value <= 0.03928 ? value / 12.92 : Math.pow((value + 0.055) / 1.055, 2.4);
+    value <= 0.04045 ? value / 12.92 : Math.pow((value + 0.055) / 1.055, 2.4);
 
   const r = mapColour(rgb[0] / 255);
   const g = mapColour(rgb[1] / 255);
