@@ -10,7 +10,7 @@ let colours = [
 ];
 
 const CONST = {
-  ratio_threshold: 4.4 // Officially, it's 4.5:1
+  ratio_threshold: 4.4    // Officially, it's 4.5:1
 };
 
 const rgb_inputs = [
@@ -21,34 +21,36 @@ const rgb_inputs = [
   document.getElementById('input-5')
 ];
 
-if (rgb_inputs[0].value === '') loadColourData();
+function startup() {
+  const loadColourData = () => {
+    const saveData = localStorage.getItem('show49');
 
-setHSLsFromRGBs();
-setTableFromColours();
-setBlocksFromColours();
+    if (saveData) colours = JSON.parse(saveData);
 
-document
-  .querySelectorAll('.colour-input')
-  .forEach(inp => inp.addEventListener('change', setFromRGB));
+    rgb_inputs.forEach((input, idx) => {
+      input.value = colours[idx + 1];
+    });
+  };
 
-document
-  .querySelectorAll('.hsl-input')
-  .forEach(inp => inp.addEventListener('change', setFromHSL));
+  if (rgb_inputs[0].value === '') loadColourData();
 
-document.getElementById('suppress').addEventListener('change', setBlocksFromColours);
+  setHSLsFromRGBs();
+  setTableFromColours();
+  setBlocksFromColours();
 
-document
-  .querySelectorAll('.colour-block p')
-  .forEach(para => para.addEventListener('click', colourTextDisplay));
+  document
+    .querySelectorAll('.colour-input')
+    .forEach(inp => inp.addEventListener('change', setFromRGB));
 
-function loadColourData() {
-  const saveData = localStorage.getItem('show49');
+  document
+    .querySelectorAll('.hsl-input')
+    .forEach(inp => inp.addEventListener('change', setFromHSL));
 
-  if (saveData) colours = JSON.parse(saveData);
+  document.getElementById('suppress').addEventListener('change', setBlocksFromColours);
 
-  rgb_inputs.forEach((input, idx) => {
-    input.value = colours[idx + 1];
-  });
+  document
+    .querySelectorAll('.colour-block p')
+    .forEach(para => para.addEventListener('click', colourTextDisplay));
 }
 
 function setFromRGB(event) {
@@ -58,10 +60,11 @@ function setFromRGB(event) {
 
   colours[input_num] = elem.value;
 
+  localStorage.setItem('show49', JSON.stringify(colours));
+
   setHSLsFromRGBs();
   setTableFromColours();
   setBlocksFromColours();
-  localStorage.setItem('show49', JSON.stringify(colours));
 }
 
 function setFromHSL(event) {
@@ -74,9 +77,9 @@ function setFromHSL(event) {
   const id = event.target.id;
   const input_num = parseInt(id[id.length - 1]);
 
-  const h = document.getElementById(`input-h${input_num}`).value;
-  const s = document.getElementById(`input-s${input_num}`).value;
-  const l = document.getElementById(`input-l${input_num}`).value;
+  const h = parseInt(document.getElementById(`input-h${input_num}`).value, 10);
+  const s = parseInt(document.getElementById(`input-s${input_num}`).value, 10);
+  const l = parseInt(document.getElementById(`input-l${input_num}`).value, 10);
 
   const rgb = HSLtoRGB(h, s, l);
   const rgbStr = '#' + rgb.map(value => toHexStr(value)).join('');
@@ -84,17 +87,10 @@ function setFromHSL(event) {
   colours[input_num] = rgbStr;
   rgb_inputs[input_num - 1].value = rgbStr;
 
+  localStorage.setItem('show49', JSON.stringify(colours));
+
   setTableFromColours();
   setBlocksFromColours();
-  localStorage.setItem('show49', JSON.stringify(colours));
-}
-
-function colourTextDisplay(event) {
-  const td = document.getElementById('text-display');
-  const style = event.target.style;
-
-  td.style.backgroundColor = style.backgroundColor;
-  td.style.color = style.color;
 }
 
 function setHSLsFromRGBs() {
@@ -139,9 +135,9 @@ function setBlocksFromColours() {
 
       const block = document.querySelector(`#block-${bg}${fg} p`);
 
-      if ((suppress && lumaD < CONST.ratio_threshold) || fg === bg) {
-        block.style.backgroundColor = '#888';
-        block.style.color = '#888';
+      if (fg === bg || (suppress && lumaD < CONST.ratio_threshold)) {
+        block.style.backgroundColor = '#999';
+        block.style.color = '#999';
       } else {
         if (colours[bg][0] !== '#') colours[bg] = `#${colours[bg]}`;
 
@@ -167,6 +163,14 @@ function rgbStrToArray(colour) {
   }
 
   return rgb;
+}
+
+function colourTextDisplay(event) {
+  const td = document.getElementById('text-display');
+  const style = event.target.style;
+
+  td.style.backgroundColor = style.backgroundColor;
+  td.style.color = style.color;
 }
 
 /**
@@ -332,3 +336,5 @@ function HSLtoRGB(h, s, l) {
     Math.round((b + m) * 255)
   ];
 }
+
+startup();
